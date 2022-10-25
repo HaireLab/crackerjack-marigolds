@@ -7,5 +7,5 @@ The following graphical analyses were done for a project looking at change in ve
 
 Recently added:
 1. Fire history at the field plot locations [ggfire.html]
-2. Coming soon: Plots of climate variability 
+2. Plots of climate variability [ggclimate.html] 
 
