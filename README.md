@@ -5,3 +5,7 @@ The following graphical analyses were done for a project looking at change in ve
 1. Describe topography at the field plot locations and present a simple conceptual model of how topography influences change in vegetation. [ggterain+conceptual.docx]
 2. Look at change in field measures in the two time periods. [compare.distributions.docx]
 
+Recently added:
+1. Fire history at the field plot locations [ggfire.html]
+2. Coming soon: Plots of climate variability 
+
