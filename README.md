@@ -16,3 +16,6 @@ I'm starting with a model that allows for Random effects intercepts for each lev
 
 Printing one example model for now. [lmer_example.docx]
 
+### Scripts for next steps
+
+glmm.test_v1.R : assemble data in a list; map lmer and output stats.
