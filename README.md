@@ -19,3 +19,5 @@ Printing one example model for now. [lmer_example.docx]
 ### Scripts for next steps
 
 glmm.test_v1.R : assemble data in a list; map lmer and output stats.
+
+glmm.test_v2.R : more code for glmms, this time using us and mx data.
