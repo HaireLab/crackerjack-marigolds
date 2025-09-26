@@ -1,0 +1,95 @@
+---
+title: "Bird traits models 2.3"
+author: "S. Haire"
+date: "`r Sys.Date()`"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE) 
+library(mgcv)
+library(gratia)
+library(ggplot2)
+library(ggpubr)
+library(tidyr)
+library(stringr)
+library(readr)
+library(dplyr)
+library(caret)
+library(ggsci)
+
+```
+
+## Fit loess univariate models with phix values >0.25 to 1 (very low values of the index had highly variable response) and years elapsed 3 or more. Use k-fold cross-validation (50 iterations) to find optimal span. Trait groups: Canopy, Forest, Ground, Oaks, Shrubland.
+
+```{r dataprep, echo=FALSE}
+## data
+dat<-read_csv("./data/phix05_newpts.csv", show_col_types = FALSE)
+dat<-dat %>% filter(phix05 >0.25) # delete records at low levels of phix05; response extremely variable in this range
+dat %>% group_by(isl_map) %>% summarize(n=n())
+dat %>% group_by(Com_Des) %>% summarize(n=n())
+
+```
+
+## Results of one run using cross-validation. Subsequent runs may differ.
+
+## Canopy
+### Optimal span = 0.9 with RMSE = 0.16 and R squared = 0.85.
+
+## Forest
+### Optimal span = 0.7 with RMSE = 0.12 and R squared = 0.86.
+
+## Oaks
+### Optimal span = 0.9 with RMSE = 0.17 and R squared = 0.88.
+
+## Shrubland
+### Optimal span = 0.9 with RMSE = 0.12 and R squared = 0.81.
+
+## Ground
+### Optimal span = 0.9 with RMSE = 0.10 and R squared = 0.83.
+
+
+```{r loess_stats, echo=FALSE, warning=FALSE}
+#define k-fold cross validation method
+ctrl <- trainControl(method = "cv", number = 50)
+grid <- expand.grid(span = seq(0.5, 0.9, len = 5), degree = 1)
+
+#perform cross-validation using smoothing spans ranging from 0.5 to 0.9
+canopy_model <- train(Canopy ~ phix05, data = dat, method = "gamLoess", tuneGrid=grid, trControl = ctrl)
+forest_model <- train(Forest ~ phix05, data = dat, method = "gamLoess", tuneGrid=grid, trControl = ctrl)
+oaks_model <- train(Oaks ~ phix05, data = dat, method = "gamLoess", tuneGrid=grid, trControl = ctrl)
+ground_model <- train(Ground ~ phix05, data = dat, method = "gamLoess", tuneGrid=grid, trControl = ctrl)
+shrub_model <- train(Shrubland ~ phix05, data = dat, method = "gamLoess", tuneGrid=grid, trControl = ctrl)
+
+#print results of k-fold cross-validation
+cat("CANOPY", "\n"); print(canopy_model)
+cat("FOREST", "\n");print(forest_model)
+cat("OAKS", "\n");print(oaks_model)
+cat("GROUND", "\n");print(ground_model)
+cat("SHRUBLAND", "\n");print(shrub_model)
+
+```
+
+
+```{r plot_loess, echo=FALSE}
+## 5 proportion variables
+## didn't include 'Shrub' bc of similarity with 'Shrubland'
+ynames<-names(dat)[c(12, 13,21,27,36)]
+vars<-dat %>% dplyr::select(c(12, 13,21,27,36,52)) # 5 y + phix05 
+vars.long <- vars %>% 
+  select(Canopy, Ground, Forest, Oaks, Shrubland, phix05) %>% 
+  pivot_longer(cols=1:5,names_to = "variable", values_to = "value")
+names(vars.long)[2]<-"Group"
+p1<- vars.long %>% 
+  ggplot(aes(x = phix05, y = value, fill=, color=Group)) +
+  geom_smooth(method = "loess", se=FALSE, linewidth=1,
+              span=0.9) +
+  theme(legend.position = 'bottom') +
+  labs(y="Response", x="PHIX05") +   
+  theme_bw()
+p1npg<- p1 + scale_color_npg()
+p1npg
+
+```
+
+
