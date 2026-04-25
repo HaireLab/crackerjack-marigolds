@@ -2,7 +2,8 @@
 ### Remote sensing of post-fire change: establishing relationships between field and remotely sensed indices
 
 ## Loess models of bird trait groups ~ rs index
-birds_traits_models_loess01.Rmd (and .docx output): Purpose: identify trends in response of bird trait groups across the Phoenix Index
+birds_traits_models_loess01.Rmd (and .docx output): Purpose: identify trends in response of bird trait groups/habitat affinities across the Phoenix Index
+phix05_newpts.csv: input datafile for birds_traits_models_loess01.Rmd 
 
 ### The following graphical analyses were done for a project looking at change in vegetation between two time periods in US sky islands (1996, 2015) and results are posted here for our purpose of linking the field measures to remotely sensed indices.
 1. Describe topography at the field plot locations and present a simple conceptual model of how topography influences change in vegetation. [ggterain+conceptual.docx]
